@@ -11,13 +11,12 @@ import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
+import java.time.LocalDateTime;
 
 @Component
 public class JwtUtil {
 
 	private final Key secretKey = Keys.hmacShaKeyFor("sIoVC8OFOgmxbk9XRYtY2zMKXuYXBGL2d3x1IV37".getBytes(StandardCharsets.UTF_8));
-	// Jwt Expiration in milliseconds
-	private final long jwtExpirationInMillis = 60000L;
 
 	private Claims parseToken(String token) {
 
@@ -27,6 +26,12 @@ public class JwtUtil {
 						.build()
 						.parseClaimsJws(token)
 						.getBody();
+	}
+
+	public LocalDateTime getJwtExpirationInMillis(String token) {
+
+		// Get the expiration date from the JWT token and return it
+		return parseToken(token).getExpiration().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDateTime();
 	}
 
 	public String getUsernameFromToken(String token) {
@@ -42,7 +47,7 @@ public class JwtUtil {
 	}
 
 	public boolean validateToken(String token) {
-		
+
 		try {
 			return parseToken(token) != null;
 		} catch (Exception e) {
@@ -60,6 +65,8 @@ public class JwtUtil {
 	public String generateToken(UserDetails userDetails) {
 
 		// Create a JWT token with the username and expiration date
+		// Jwt Expiration in milliseconds
+		long jwtExpirationInMillis = 60000L;
 		return Jwts.builder()
 						.setSubject(userDetails.getUsername())
 						.setExpiration(new java.util.Date(System.currentTimeMillis() + jwtExpirationInMillis))

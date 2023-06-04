@@ -1,5 +1,6 @@
 package com.example.mytodoapp.config;
 
+import com.example.mytodoapp.services.DatabaseTokenBlacklistService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,10 +18,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
 	private final UserDetailsService userDetailsService;
 	private final JwtUtil jwtUtil;
+	private final DatabaseTokenBlacklistService databaseTokenBlacklistService;
 
-	public JwtAuthFilter(UserDetailsService userDetailsService, JwtUtil jwtUtil) {
+	public JwtAuthFilter(UserDetailsService userDetailsService, JwtUtil jwtUtil, DatabaseTokenBlacklistService databaseTokenBlacklistService) {
 		this.userDetailsService = userDetailsService;
 		this.jwtUtil = jwtUtil;
+		this.databaseTokenBlacklistService = databaseTokenBlacklistService;
 	}
 
 	@Override
@@ -28,12 +31,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
 		// Get Token from Request
 		String token = getTokenFromRequest(request);
-		// Validate Token
-		if (token != null && jwtUtil.validateToken(token)) {
+		// ! this checking logic is getting heavy as per my understanding.
+		if (token != null && !databaseTokenBlacklistService.isTokenBlacklisted(token) && jwtUtil.validateToken(token)) {
 			// Get Username from Token
 			String username = jwtUtil.getUsernameFromToken(token);
 			UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-			System.out.println(" ***************** UserDetails: ***************** " + userDetails);
 			// Set Authentication in Context
 			SecurityContextHolder.getContext().setAuthentication(jwtUtil.getAuthentication(userDetails, request));
 		}
