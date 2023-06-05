@@ -7,4 +7,6 @@ public interface TokenBlacklistService {
 	public void addTokenToBlacklist(String token, LocalDateTime expiryDate);
 
 	public boolean isTokenBlacklisted(String token);
+
+	public void deleteByExpiryDateBefore(LocalDateTime expiryDate);
 }

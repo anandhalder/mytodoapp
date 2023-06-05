@@ -5,11 +5,10 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
-
 @Repository
 public interface BlacklistTokenRepository extends JpaRepository<BlacklistToken, String> {
+
 	boolean existsById(@NotNull String token);
 
-	void deleteByexpirationDateBefore(LocalDateTime expirationDate);
+	void deleteByExpirationDateBefore(@NotNull java.time.LocalDateTime expiryDate);
 }

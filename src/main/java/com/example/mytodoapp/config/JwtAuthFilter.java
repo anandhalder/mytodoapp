@@ -1,6 +1,6 @@
 package com.example.mytodoapp.config;
 
-import com.example.mytodoapp.services.DatabaseTokenBlacklistService;
+import com.example.mytodoapp.services.TokenBlacklistServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,12 +18,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
 	private final UserDetailsService userDetailsService;
 	private final JwtUtil jwtUtil;
-	private final DatabaseTokenBlacklistService databaseTokenBlacklistService;
+	private final TokenBlacklistServiceImpl tokenBlacklistServiceImpl;
 
-	public JwtAuthFilter(UserDetailsService userDetailsService, JwtUtil jwtUtil, DatabaseTokenBlacklistService databaseTokenBlacklistService) {
+	public JwtAuthFilter(UserDetailsService userDetailsService, JwtUtil jwtUtil, TokenBlacklistServiceImpl tokenBlacklistServiceImpl) {
 		this.userDetailsService = userDetailsService;
 		this.jwtUtil = jwtUtil;
-		this.databaseTokenBlacklistService = databaseTokenBlacklistService;
+		this.tokenBlacklistServiceImpl = tokenBlacklistServiceImpl;
 	}
 
 	@Override
@@ -32,7 +32,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 		// Get Token from Request
 		String token = getTokenFromRequest(request);
 		// ! this checking logic is getting heavy as per my understanding.
-		if (token != null && !databaseTokenBlacklistService.isTokenBlacklisted(token) && jwtUtil.validateToken(token)) {
+		if (token != null && !tokenBlacklistServiceImpl.isTokenBlacklisted(token) && jwtUtil.validateToken(token)) {
 			// Get Username from Token
 			String username = jwtUtil.getUsernameFromToken(token);
 			UserDetails userDetails = userDetailsService.loadUserByUsername(username);

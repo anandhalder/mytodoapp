@@ -14,6 +14,6 @@ public class TokenCleanupTask {
 
 	//	@Scheduled(fixedRate = 10 * 1000)
 	public void cleanUpTokens() {
-		blacklistTokenRepository.deleteByexpirationDateBefore(java.time.LocalDateTime.now());
+//		blacklistTokenRepository.deleteByExpiryDateBefore(java.time.LocalDateTime.now());
 	}
 }
