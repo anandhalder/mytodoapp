@@ -13,8 +13,14 @@ import java.util.List;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-	// ! We have to make use of Database to get the User Details but for simple
-	// ! example we are hardcoding the User Details
+	private final UserService userService;
+	private final UserPasswordService userPasswordService;
+
+	public UserDetailsServiceImpl(UserService userService, UserPasswordService userPasswordService) {
+		this.userService = userService;
+		this.userPasswordService = userPasswordService;
+	}
+
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
@@ -22,6 +28,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			add((GrantedAuthority) () -> "ROLE_USER");
 		}};
 
-		return new User("test", "test", authorities);
+		// Fetching the user from the database.
+		com.example.mytodoapp.model.User existingUser = userService.getUserByUsername(username);
+
+		try {
+			// Getting the password from the database.
+			String password = userPasswordService.getPasswordByUserId(existingUser.getId());
+			return new User(existingUser.getUsername(), password, authorities);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

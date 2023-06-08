@@ -7,9 +7,11 @@ import org.springframework.data.domain.Pageable;
 
 public interface UserService {
 
-	User createUser(User user);
+	User createUser(String username, String password);
 
 	User getUserById(Long id);
+
+	User getUserByUsername(String username);
 
 	void deleteUserById(Long id);
 

@@ -19,14 +19,13 @@ import java.util.Set;
 @AllArgsConstructor
 public class User {
 
-	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "users")
-	Set<Role> roles = new HashSet<>();
+//	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "users")
+//	Set<Role> roles = new HashSet<>();
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotNull
 	@Column(nullable = false, unique = true)
 	private String username;
 

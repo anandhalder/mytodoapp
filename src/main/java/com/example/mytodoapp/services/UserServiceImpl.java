@@ -5,6 +5,7 @@ import com.example.mytodoapp.exceptions.ResourceAlreadyExistsException;
 import com.example.mytodoapp.exceptions.ResourceNotFoundException;
 import com.example.mytodoapp.model.Task;
 import com.example.mytodoapp.model.User;
+import com.example.mytodoapp.model.UserPassword;
 import com.example.mytodoapp.repository.TaskRepository;
 import com.example.mytodoapp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,14 +22,23 @@ public class UserServiceImpl implements UserService {
 
 	private final UserRepository userRepository;
 	private final TaskRepository taskRepository;
+	private final UserPasswordService userPasswordService;
 
-	public User createUser(User newUser) {
+	public User createUser(String username, String password) {
 
-		if (userRepository.existsByUsername(newUser.getUsername())) {
-			throw new ResourceAlreadyExistsException("User already exists with username " + newUser.getUsername());
+		if (userRepository.existsByUsername(username)) {
+			throw new ResourceAlreadyExistsException("User already exists with username " + username);
 		}
 
-		return userRepository.save(newUser);
+		    User newUser = userRepository.save(User.builder().username(username).build());
+
+		    if (!userPasswordService.saveUserPassword(UserPassword.builder().userId(newUser.getId()).password(password).build())) {
+					// Rollback the changes if the password is not saved
+					// Throwing exception will trigger the rollback
+					throw new RuntimeException("Error while saving the password");
+				}
+
+				return newUser;
 	}
 
 	public User getUserById(Long id) {
@@ -40,6 +50,18 @@ public class UserServiceImpl implements UserService {
 		} else {
 			throw new ResourceNotFoundException("User not found with id: " + id);
 		}
+	}
+
+	@Override
+	public User getUserByUsername(String username) {
+
+		Optional<User> existingUser = userRepository.findByUsername(username);
+
+		if (existingUser.isEmpty()) {
+			throw new ResourceNotFoundException("User not found with username: " + username);
+		}
+
+		return existingUser.get();
 	}
 
 	@Override
