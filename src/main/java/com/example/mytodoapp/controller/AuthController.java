@@ -2,6 +2,7 @@ package com.example.mytodoapp.controller;
 
 import com.example.mytodoapp.config.JwtUtil;
 import com.example.mytodoapp.dto.AuthRequest;
+import com.example.mytodoapp.dto.RegisterUserRequest;
 import com.example.mytodoapp.response.ErrorResponse;
 import com.example.mytodoapp.response.SuccessResponse;
 import com.example.mytodoapp.services.TokenBlacklistService;
@@ -9,6 +10,8 @@ import com.example.mytodoapp.services.TokenBlacklistServiceImpl;
 import com.example.mytodoapp.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,6 +22,7 @@ import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
 	private final UserDetailsService userDetailsService;
@@ -27,13 +31,6 @@ public class AuthController {
 	private final TokenBlacklistService tokenBlacklistService;
 	private final UserService userService;
 
-	public AuthController(UserDetailsService userDetailsService, JwtUtil jwtUtil, TokenBlacklistServiceImpl tokenBlacklistServiceImpl, TokenBlacklistService tokenBlacklistService, UserService userService) {
-		this.userDetailsService = userDetailsService;
-		this.jwtUtil = jwtUtil;
-		this.tokenBlacklistServiceImpl = tokenBlacklistServiceImpl;
-		this.tokenBlacklistService = tokenBlacklistService;
-		this.userService = userService;
-	}
 
 	@GetMapping("/login")
 	public String getToken(@RequestBody AuthRequest authRequest) throws Exception {
@@ -77,7 +74,7 @@ public class AuthController {
 		}
 
 		// Creating the user.
-		userService.createUser(	authRequest.getUsername(), authRequest.getPassword());
+		userService.createUser(RegisterUserRequest.builder().username(authRequest.getUsername()).password(authRequest.getPassword()).build());
 
 		return ResponseEntity
 						.status(HttpStatus.CREATED)

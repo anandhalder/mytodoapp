@@ -1,5 +1,6 @@
 package com.example.mytodoapp.services;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,15 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
 	private final UserService userService;
 	private final UserPasswordService userPasswordService;
-
-	public UserDetailsServiceImpl(UserService userService, UserPasswordService userPasswordService) {
-		this.userService = userService;
-		this.userPasswordService = userPasswordService;
-	}
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

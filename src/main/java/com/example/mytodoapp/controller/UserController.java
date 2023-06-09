@@ -1,10 +1,12 @@
 package com.example.mytodoapp.controller;
 
+import com.example.mytodoapp.dto.RegisterUserRequest;
 import com.example.mytodoapp.model.Task;
 import com.example.mytodoapp.model.User;
 import com.example.mytodoapp.response.SuccessResponse;
 import com.example.mytodoapp.services.UserService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,13 +21,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 public class UserController {
 
 	private final UserService userService;
-
-	public UserController(UserService userService) {
-		this.userService = userService;
-	}
 
 	@GetMapping("/public")
 	public String getWelcomeMessage() {
@@ -51,26 +50,27 @@ public class UserController {
 		return PageRequest.of(page, size, sortable);
 	}
 
-	@PostMapping("/users")
-	public ResponseEntity<?> createUser(@Valid @RequestBody User newUser) {
-
-		User createdUser = userService.createUser(newUser);
-
-		URI location = ServletUriComponentsBuilder
-						.fromCurrentRequest()
-						.path("/{id}")
-						.buildAndExpand(createdUser.getId())
-						.toUri();
-
-		return ResponseEntity
-						.created(location)
-						.body(SuccessResponse
-										.builder()
-										.status(HttpStatus.CREATED)
-										.message("User successfully created with Id: " + createdUser.getId())
-										.data(createdUser)
-										.build());
-	}
+	// Todo: I have to delete this method.
+//	@PostMapping("/users")
+//	public ResponseEntity<?> createUser(@Valid @RequestBody RegisterUserRequest newUser) {
+//
+//		User createdUser = userService.createUser(newUser);
+//
+//		URI location = ServletUriComponentsBuilder
+//						.fromCurrentRequest()
+//						.path("/{id}")
+//						.buildAndExpand(createdUser.getId())
+//						.toUri();
+//
+//		return ResponseEntity
+//						.created(location)
+//						.body(SuccessResponse
+//										.builder()
+//										.status(HttpStatus.CREATED)
+//										.message("User successfully created with Id: " + createdUser.getId())
+//										.data(createdUser)
+//										.build());
+//	}
 
 	@GetMapping("/users/{id}")
 	public ResponseEntity<?> getUserById(@PathVariable Long id) {

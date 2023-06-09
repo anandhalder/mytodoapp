@@ -1,5 +1,6 @@
 package com.example.mytodoapp.services;
 
+import com.example.mytodoapp.dto.RegisterUserRequest;
 import com.example.mytodoapp.model.Task;
 import com.example.mytodoapp.model.User;
 import org.springframework.data.domain.Page;
@@ -7,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface UserService {
 
-	User createUser(String username, String password);
+	User createUser(RegisterUserRequest newUser);
 
 	User getUserById(Long id);
 

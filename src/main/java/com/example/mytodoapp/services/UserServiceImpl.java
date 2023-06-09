@@ -1,6 +1,7 @@
 package com.example.mytodoapp.services;
 
 import com.example.mytodoapp.Utils.ObjectUpdateUtility;
+import com.example.mytodoapp.dto.RegisterUserRequest;
 import com.example.mytodoapp.exceptions.ResourceAlreadyExistsException;
 import com.example.mytodoapp.exceptions.ResourceNotFoundException;
 import com.example.mytodoapp.model.Task;
@@ -24,21 +25,21 @@ public class UserServiceImpl implements UserService {
 	private final TaskRepository taskRepository;
 	private final UserPasswordService userPasswordService;
 
-	public User createUser(String username, String password) {
+	public User createUser(RegisterUserRequest newUser) {
 
-		if (userRepository.existsByUsername(username)) {
-			throw new ResourceAlreadyExistsException("User already exists with username " + username);
+		if (userRepository.existsByUsername(newUser.getUsername())) {
+			throw new ResourceAlreadyExistsException("User already exists with username " + newUser.getUsername());
 		}
 
-		    User newUser = userRepository.save(User.builder().username(username).build());
+		    User userCreated = userRepository.save(User.builder().username(newUser.getUsername()).build());
 
-		    if (!userPasswordService.saveUserPassword(UserPassword.builder().userId(newUser.getId()).password(password).build())) {
+		    if (!userPasswordService.saveUserPassword(UserPassword.builder().userId(userCreated.getId()).password(newUser.getPassword()).build())) {
 					// Rollback the changes if the password is not saved
 					// Throwing exception will trigger the rollback
 					throw new RuntimeException("Error while saving the password");
 				}
 
-				return newUser;
+				return userCreated;
 	}
 
 	public User getUserById(Long id) {
