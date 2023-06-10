@@ -33,7 +33,7 @@ public class AuthController {
 
 
 	@GetMapping("/login")
-	public String getToken(@RequestBody AuthRequest authRequest) throws Exception {
+	public String getToken(@Valid @RequestBody AuthRequest authRequest) throws Exception {
 		UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
 
 		if (userDetails.getPassword().equals(authRequest.getPassword())) {

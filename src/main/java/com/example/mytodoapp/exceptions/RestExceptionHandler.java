@@ -1,11 +1,16 @@
 package com.example.mytodoapp.exceptions;
 
 import com.example.mytodoapp.response.ErrorResponse;
+import com.example.mytodoapp.response.ValidationResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.List;
+import java.util.Objects;
 
 @RestControllerAdvice
 public class RestExceptionHandler {
@@ -33,14 +38,16 @@ public class RestExceptionHandler {
 	}
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+	public ResponseEntity<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+
+		List<FieldError> error_list =  ex.getFieldErrors();
 
 		return ResponseEntity
 						.status(HttpStatus.BAD_REQUEST)
-						.body(ErrorResponse
+						.body(ValidationResponse
 										.builder()
-										.status(HttpStatus.BAD_REQUEST)
-										.message(ex.getMessage())
+										.message("Validation Error")
+										.fieldError(error_list)
 										.build());
 	}
 }
