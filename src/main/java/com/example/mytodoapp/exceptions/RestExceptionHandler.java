@@ -8,6 +8,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
 import java.util.Objects;
@@ -48,6 +49,18 @@ public class RestExceptionHandler {
 										.builder()
 										.message("Validation Error")
 										.fieldError(error_list)
+										.build());
+	}
+
+	@ExceptionHandler(HttpClientErrorException.Unauthorized.class)
+	public ResponseEntity<?> handleUnauthorizedException(HttpClientErrorException.Unauthorized ex) {
+
+		return ResponseEntity
+						.status(HttpStatus.UNAUTHORIZED)
+						.body(ErrorResponse
+										.builder()
+										.status(HttpStatus.UNAUTHORIZED)
+										.message("Unauthorized")
 										.build());
 	}
 }

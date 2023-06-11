@@ -14,8 +14,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -30,17 +33,20 @@ public class AuthController {
 	private final TokenBlacklistServiceImpl tokenBlacklistServiceImpl;
 	private final TokenBlacklistService tokenBlacklistService;
 	private final UserService userService;
+	private final PasswordEncoder passwordEncoder;
+	private final AuthenticationManager authenticationManager;
 
 
 	@GetMapping("/login")
 	public String getToken(@Valid @RequestBody AuthRequest authRequest) throws Exception {
 		UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
 
-		if (userDetails.getPassword().equals(authRequest.getPassword())) {
-			return jwtUtil.generateToken(userDetails);
-		}
+		authenticationManager.authenticate(
+						new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
+		);
 
-		throw new Exception("Invalid username or password");
+
+		return "";
 	}
 
 	@PostMapping("/logout")
@@ -74,7 +80,11 @@ public class AuthController {
 		}
 
 		// Creating the user.
-		userService.createUser(RegisterUserRequest.builder().username(authRequest.getUsername()).password(authRequest.getPassword()).build());
+		userService.createUser(RegisterUserRequest
+						.builder()
+						.username(authRequest.getUsername())
+						.password(passwordEncoder.encode(authRequest.getPassword()))
+						.build());
 
 		return ResponseEntity
 						.status(HttpStatus.CREATED)

@@ -1,11 +1,16 @@
 package com.example.mytodoapp.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -13,15 +18,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
 	private final JwtAuthEntryPoint jwtAuthEntryPoint;
 	private final JwtAuthFilter jwtAuthFilter;
-
-	public SecurityConfig(JwtAuthEntryPoint jwtAuthEntryPoint, JwtAuthFilter jwtAuthFilter) {
-		this.jwtAuthEntryPoint = jwtAuthEntryPoint;
-		this.jwtAuthFilter = jwtAuthFilter;
-	}
+	private final UserDetailsService userDetailsService;
 
 	@Bean
 	public SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
@@ -35,16 +37,27 @@ public class SecurityConfig {
 						.requestMatchers("/auth/**").permitAll()
 						.anyRequest().authenticated()
 						.and()
+						.authenticationProvider(daoAuthenticationProvider())
 						.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
 
 		return httpSecurity.build();
 	}
 
-//	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//		auth.userDetailsService(auth.getDefaultUserDetailsService()).passwordEncoder(passwordEncoder());
-//	}
+	@Bean
+	public DaoAuthenticationProvider daoAuthenticationProvider() {
+		DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+		daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+		daoAuthenticationProvider.setUserDetailsService(userDetailsService);
+		return daoAuthenticationProvider;
+	}
 
+	@Bean
+	public AuthenticationManager authenticationManagerBean(AuthenticationConfiguration configuration) throws Exception {
+		return configuration.getAuthenticationManager();
+	}
+
+	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
