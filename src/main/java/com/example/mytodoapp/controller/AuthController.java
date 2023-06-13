@@ -39,6 +39,7 @@ public class AuthController {
 	@GetMapping("/login")
 	public ResponseEntity<?> login(@Valid @RequestBody AuthRequest authRequest) {
 
+		// TODO: Check if the user is already logged in !
 			String token = authService.loginService(authRequest);
 
 				return ResponseEntity
