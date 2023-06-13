@@ -18,7 +18,7 @@ public class JwtUtil {
 
 	private final Key secretKey = Keys.hmacShaKeyFor("sIoVC8OFOgmxbk9XRYtY2zMKXuYXBGL2d3x1IV37".getBytes(StandardCharsets.UTF_8));
 
-	private Claims parseToken(String token) {
+	public Claims parseToken(String token) {
 
 		// Parse the JWT token and return the Claims
 		return Jwts.parserBuilder()
