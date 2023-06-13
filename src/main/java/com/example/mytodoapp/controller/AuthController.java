@@ -4,7 +4,9 @@ import com.example.mytodoapp.config.JwtUtil;
 import com.example.mytodoapp.dto.AuthRequest;
 import com.example.mytodoapp.dto.RegisterUserRequest;
 import com.example.mytodoapp.response.ErrorResponse;
+import com.example.mytodoapp.response.SuccessAuthResponse;
 import com.example.mytodoapp.response.SuccessResponse;
+import com.example.mytodoapp.services.AuthService;
 import com.example.mytodoapp.services.TokenBlacklistService;
 import com.example.mytodoapp.services.TokenBlacklistServiceImpl;
 import com.example.mytodoapp.services.UserService;
@@ -14,10 +16,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,26 +26,30 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class AuthController {
 
-	private final UserDetailsService userDetailsService;
+
 	private final JwtUtil jwtUtil;
 	private final TokenBlacklistServiceImpl tokenBlacklistServiceImpl;
 	private final TokenBlacklistService tokenBlacklistService;
 	private final UserService userService;
 	private final PasswordEncoder passwordEncoder;
-	private final AuthenticationManager authenticationManager;
+	private final AuthService authService;
+
 
 
 	@GetMapping("/login")
-	public String getToken(@Valid  @RequestBody AuthRequest authRequest) throws Exception {
-		UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
+	public ResponseEntity<?> login(@Valid @RequestBody AuthRequest authRequest) {
 
-		authenticationManager.authenticate(
-						new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
-		);
+			String token = authService.loginService(authRequest);
 
-
-		return "";
-	}
+				return ResponseEntity
+								.status(HttpStatus.OK)
+								.body(SuccessAuthResponse
+												.builder()
+												.token(token)
+												.message("Login Successful")
+												.token(token)
+												.build());
+		}
 
 	@PostMapping("/logout")
 	public String logout(HttpServletRequest request, HttpServletResponse response) {

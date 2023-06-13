@@ -19,6 +19,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	private final UserPasswordService userPasswordService;
 
 	@Override
+	// TODO: DO Better Exception Handling.
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
 		List<GrantedAuthority> authorities = new ArrayList<>() {{

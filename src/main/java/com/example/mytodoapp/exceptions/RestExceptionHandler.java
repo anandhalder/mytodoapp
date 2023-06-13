@@ -63,4 +63,16 @@ public class RestExceptionHandler {
 										.message("Unauthorized")
 										.build());
 	}
+
+	@ExceptionHandler(AuthenticationException.class)
+	public ResponseEntity<?> handleAuthenticationException(AuthenticationException ex) {
+
+		return ResponseEntity
+						.status(HttpStatus.UNAUTHORIZED)
+						.body(ErrorResponse
+										.builder()
+										.status(HttpStatus.UNAUTHORIZED)
+										.message(ex.getMessage())
+										.build());
+	}
 }
