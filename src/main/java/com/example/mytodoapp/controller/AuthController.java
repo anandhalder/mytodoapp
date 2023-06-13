@@ -38,7 +38,7 @@ public class AuthController {
 
 
 	@GetMapping("/login")
-	public String getToken(@Valid @RequestBody AuthRequest authRequest) throws Exception {
+	public String getToken(@Valid  @RequestBody AuthRequest authRequest) throws Exception {
 		UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
 
 		authenticationManager.authenticate(
