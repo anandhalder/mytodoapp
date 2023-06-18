@@ -15,7 +15,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,7 +27,6 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class AuthController {
 
-
 	private final JwtUtil jwtUtil;
 	private final TokenBlacklistServiceImpl tokenBlacklistServiceImpl;
 	private final TokenBlacklistService tokenBlacklistService;
@@ -36,10 +34,8 @@ public class AuthController {
 	private final PasswordEncoder passwordEncoder;
 	private final AuthService authService;
 
-
-
 	@GetMapping("/login")
-	public ResponseEntity<?> login(@Valid @RequestBody AuthRequest authRequest,@RequestHeader("Authorization") String authHeader) {
+	public ResponseEntity<?> login(@Valid @RequestBody AuthRequest authRequest, @RequestHeader("Authorization") String authHeader) {
 
 		String token = authHeader.replace("Bearer ", "");
 
