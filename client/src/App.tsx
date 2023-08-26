@@ -1,15 +1,17 @@
 import React from 'react';
 import Login from './components/Login';
 import Header from './components/Header';
+import Footer from "./components/Footer";
 import './App.css';
 
 function App() {
-  return (
-    <div className="App">
-      <Header />
-      <Login />
-    </div>
-  );
+	return (
+		<div className="App">
+			<Header/>
+			<Login/>
+			<Footer/>
+		</div>
+	);
 }
 
 export default App;
