@@ -3,9 +3,11 @@ package com.example.mytodoapp.services.Impl;
 import com.example.mytodoapp.model.Task;
 import com.example.mytodoapp.repository.TaskRepository;
 import com.example.mytodoapp.services.TaskService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class TaskServiceImpl implements TaskService {
 
 	private final TaskRepository taskRepository;

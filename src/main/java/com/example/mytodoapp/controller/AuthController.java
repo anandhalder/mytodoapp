@@ -94,7 +94,10 @@ public class AuthController {
 	public ResponseEntity<?> register(@RequestBody AuthRequest authRequest) {
 
 		// Validating the user inputs.
-		if (authRequest.getUsername() == null || authRequest.getUsername().isEmpty() || authRequest.getPassword() == null || authRequest.getPassword().isEmpty()) {
+		if (authRequest.getUsername() == null ||
+						authRequest.getUsername().isEmpty() ||
+						authRequest.getPassword() == null ||
+						authRequest.getPassword().isEmpty()) {
 			return ResponseEntity
 							.badRequest()
 							.body(ErrorResponse

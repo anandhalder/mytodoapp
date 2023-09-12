@@ -12,7 +12,7 @@ public class TaskController {
 	private final TaskService taskService;
 
 	// Constructor based Injection.
-	TaskController(TaskService taskService) {
+	public TaskController(TaskService taskService) {
 		this.taskService = taskService;
 	}
 
