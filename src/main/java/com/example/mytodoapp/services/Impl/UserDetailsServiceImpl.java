@@ -1,5 +1,7 @@
-package com.example.mytodoapp.services;
+package com.example.mytodoapp.services.Impl;
 
+import com.example.mytodoapp.services.UserPasswordService;
+import com.example.mytodoapp.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;

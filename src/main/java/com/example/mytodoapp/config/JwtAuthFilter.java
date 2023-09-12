@@ -1,6 +1,6 @@
 package com.example.mytodoapp.config;
 
-import com.example.mytodoapp.services.TokenBlacklistServiceImpl;
+import com.example.mytodoapp.services.Impl.TokenBlacklistServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

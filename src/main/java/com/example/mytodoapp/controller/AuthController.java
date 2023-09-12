@@ -8,7 +8,7 @@ import com.example.mytodoapp.response.SuccessAuthResponse;
 import com.example.mytodoapp.response.SuccessResponse;
 import com.example.mytodoapp.services.AuthService;
 import com.example.mytodoapp.services.TokenBlacklistService;
-import com.example.mytodoapp.services.TokenBlacklistServiceImpl;
+import com.example.mytodoapp.services.Impl.TokenBlacklistServiceImpl;
 import com.example.mytodoapp.services.UserService;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;

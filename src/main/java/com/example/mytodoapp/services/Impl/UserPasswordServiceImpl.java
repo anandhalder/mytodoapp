@@ -1,8 +1,9 @@
-package com.example.mytodoapp.services;
+package com.example.mytodoapp.services.Impl;
 
 import com.example.mytodoapp.exceptions.ResourceNotFoundException;
 import com.example.mytodoapp.model.UserPassword;
 import com.example.mytodoapp.repository.UserPasswordRepository;
+import com.example.mytodoapp.services.UserPasswordService;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

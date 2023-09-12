@@ -1,7 +1,8 @@
-package com.example.mytodoapp.services;
+package com.example.mytodoapp.services.Impl;
 
 import com.example.mytodoapp.model.BlacklistToken;
 import com.example.mytodoapp.repository.BlacklistTokenRepository;
+import com.example.mytodoapp.services.TokenBlacklistService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

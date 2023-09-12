@@ -1,4 +1,4 @@
-package com.example.mytodoapp.services;
+package com.example.mytodoapp.services.Impl;
 
 import com.example.mytodoapp.Utils.ObjectUpdateUtility;
 import com.example.mytodoapp.dto.RegisterUserRequest;
@@ -9,6 +9,8 @@ import com.example.mytodoapp.model.User;
 import com.example.mytodoapp.model.UserPassword;
 import com.example.mytodoapp.repository.TaskRepository;
 import com.example.mytodoapp.repository.UserRepository;
+import com.example.mytodoapp.services.UserPasswordService;
+import com.example.mytodoapp.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
