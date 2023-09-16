@@ -27,21 +27,20 @@ public class UserServiceImpl implements UserService {
 	private final TaskRepository taskRepository;
 	private final UserPasswordService userPasswordService;
 
-	public User createUser(RegisterUserRequest newUser) {
+	public void createUser(RegisterUserRequest newUser) {
 
 		if (userRepository.existsByUsername(newUser.getUsername())) {
 			throw new ResourceAlreadyExistsException("User already exists with username " + newUser.getUsername());
 		}
 
-		    User userCreated = userRepository.save(User.builder().username(newUser.getUsername()).build());
+		User userCreated = userRepository.save(User.builder().username(newUser.getUsername()).build());
 
-		    if (!userPasswordService.saveUserPassword(UserPassword.builder().userId(userCreated.getId()).password(newUser.getPassword()).build())) {
-					// Rollback the changes if the password is not saved
-					// Throwing exception will trigger the rollback
-					throw new RuntimeException("Error while saving the password");
-				}
+		if (!userPasswordService.saveUserPassword(UserPassword.builder().userId(userCreated.getId()).password(newUser.getPassword()).build())) {
+			// Rollback the changes if the password is not saved
+			// Throwing exception will trigger the rollback
+			throw new RuntimeException("Error while saving the password");
+		}
 
-				return userCreated;
 	}
 
 	public User getUserById(Long id) {

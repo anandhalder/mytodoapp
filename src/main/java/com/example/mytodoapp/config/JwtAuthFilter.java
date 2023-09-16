@@ -31,7 +31,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
 		// Get Token from Request
 		String token = getTokenFromRequest(request);
-		// ! this checking logic is getting heavy as per my understanding.
 		if (token != null && !tokenBlacklistServiceImpl.isTokenBlacklisted(token) && jwtUtil.validateToken(token)) {
 			// Get Username from Token
 			String username = jwtUtil.getUsernameFromToken(token);

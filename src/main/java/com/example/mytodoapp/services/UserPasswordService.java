@@ -5,6 +5,7 @@ import com.example.mytodoapp.model.UserPassword;
 
 public interface UserPasswordService {
 
-	String getPasswordByUserId(Long userid) throws Exception;
+	boolean checkCredentials(Long userid, String password);
+
 	boolean saveUserPassword(UserPassword userPassword);
 }

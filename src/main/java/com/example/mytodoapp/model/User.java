@@ -5,12 +5,11 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -19,9 +18,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class User {
 
-//	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "users")
-//	Set<Role> roles = new HashSet<>();
-
+	@Getter
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -29,13 +26,10 @@ public class User {
 	@Column(nullable = false, unique = true)
 	private String username;
 
+	@Getter
 	@JsonIgnore
 	@OneToMany(mappedBy = "user")
 	private List<Task> tasks = new ArrayList<>();
-
-	public Long getId() {
-		return this.id;
-	}
 
 	public void setId(Long id) {
 		this.id = id;
@@ -47,10 +41,6 @@ public class User {
 
 	public void setUsername(@NotNull String username) {
 		this.username = username;
-	}
-
-	public List<Task> getTasks() {
-		return this.tasks;
 	}
 
 	public void AddTask(Task task) {

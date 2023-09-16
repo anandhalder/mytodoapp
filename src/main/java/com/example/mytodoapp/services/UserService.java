@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface UserService {
 
-	User createUser(RegisterUserRequest newUser);
+	void createUser(RegisterUserRequest newUser);
 
 	User getUserById(Long id);
 

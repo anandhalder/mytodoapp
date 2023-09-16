@@ -7,8 +7,8 @@ import com.example.mytodoapp.response.ErrorResponse;
 import com.example.mytodoapp.response.SuccessAuthResponse;
 import com.example.mytodoapp.response.SuccessResponse;
 import com.example.mytodoapp.services.AuthService;
-import com.example.mytodoapp.services.TokenBlacklistService;
 import com.example.mytodoapp.services.Impl.TokenBlacklistServiceImpl;
+import com.example.mytodoapp.services.TokenBlacklistService;
 import com.example.mytodoapp.services.UserService;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 
-@RestController
+//@RestController TODO: Not Required for now, because for API application user will send username and password for every call !
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {

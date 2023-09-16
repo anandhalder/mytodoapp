@@ -1,32 +1,26 @@
 package com.example.mytodoapp.services.Impl;
 
-import com.example.mytodoapp.exceptions.ResourceNotFoundException;
 import com.example.mytodoapp.model.UserPassword;
 import com.example.mytodoapp.repository.UserPasswordRepository;
 import com.example.mytodoapp.services.UserPasswordService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserPasswordServiceImpl implements UserPasswordService {
 
 	private final UserPasswordRepository userPasswordRepository;
-
-	public UserPasswordServiceImpl(UserPasswordRepository userPasswordRepository) {
-		this.userPasswordRepository = userPasswordRepository;
-	}
+	private final PasswordEncoder passwordEncoder;
 
 	@Override
-	public String getPasswordByUserId(Long userid) throws Exception {
+	public boolean checkCredentials(Long userid, String password) {
 
 		Optional<UserPassword> userPassword = userPasswordRepository.findById(userid);
-
-		if (userPassword.isEmpty()) {
-			throw new ResourceNotFoundException("User not found with id: " + userid);
-		}
-
-		return userPassword.get().getPassword();
+		return userPassword.isPresent() && passwordEncoder.matches(password, userPassword.get().getPassword());
 	}
 
 	@Override
