@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
-import java.util.Objects;
 
 @RestControllerAdvice
 public class RestExceptionHandler {
@@ -41,7 +40,7 @@ public class RestExceptionHandler {
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
 
-		List<FieldError> error_list =  ex.getFieldErrors();
+		List<FieldError> error_list = ex.getFieldErrors();
 
 		return ResponseEntity
 						.status(HttpStatus.BAD_REQUEST)
@@ -61,18 +60,6 @@ public class RestExceptionHandler {
 										.builder()
 										.status(HttpStatus.UNAUTHORIZED)
 										.message("Unauthorized")
-										.build());
-	}
-
-	@ExceptionHandler(AuthenticationException.class)
-	public ResponseEntity<?> handleAuthenticationException(AuthenticationException ex) {
-
-		return ResponseEntity
-						.status(HttpStatus.UNAUTHORIZED)
-						.body(ErrorResponse
-										.builder()
-										.status(HttpStatus.UNAUTHORIZED)
-										.message(ex.getMessage())
 										.build());
 	}
 }
