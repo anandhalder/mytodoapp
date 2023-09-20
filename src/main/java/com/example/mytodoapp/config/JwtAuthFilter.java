@@ -5,9 +5,6 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -16,12 +13,10 @@ import java.io.IOException;
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-	private final UserDetailsService userDetailsService;
 	private final JwtUtil jwtUtil;
 	private final TokenBlacklistServiceImpl tokenBlacklistServiceImpl;
 
-	public JwtAuthFilter(UserDetailsService userDetailsService, JwtUtil jwtUtil, TokenBlacklistServiceImpl tokenBlacklistServiceImpl) {
-		this.userDetailsService = userDetailsService;
+	public JwtAuthFilter(JwtUtil jwtUtil, TokenBlacklistServiceImpl tokenBlacklistServiceImpl) {
 		this.jwtUtil = jwtUtil;
 		this.tokenBlacklistServiceImpl = tokenBlacklistServiceImpl;
 	}
@@ -34,9 +29,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 		if (token != null && !tokenBlacklistServiceImpl.isTokenBlacklisted(token) && jwtUtil.validateToken(token)) {
 			// Get Username from Token
 			String username = jwtUtil.getUsernameFromToken(token);
-			UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+//			UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 			// Set Authentication in Context
-			SecurityContextHolder.getContext().setAuthentication(jwtUtil.getAuthentication(userDetails, request));
+//			SecurityContextHolder.getContext().setAuthentication(jwtUtil.getAuthentication(userDetails, request));
 		}
 
 		filterChain.doFilter(request, response);

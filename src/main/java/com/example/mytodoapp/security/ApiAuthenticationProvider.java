@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class ApiAuthenticationProvider implements AuthenticationProvider {
 
 	private final UserService userService;
-	private UserPasswordService userPasswordService;
+	private final UserPasswordService userPasswordService;
 
 	@Override
 	public ApiAuthenticationToken authenticate(Authentication authentication) {
