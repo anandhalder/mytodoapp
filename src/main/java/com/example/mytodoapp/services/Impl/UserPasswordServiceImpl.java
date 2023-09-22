@@ -14,14 +14,6 @@ import java.util.Optional;
 public class UserPasswordServiceImpl implements UserPasswordService {
 
 	private final UserPasswordRepository userPasswordRepository;
-	private final PasswordEncoder passwordEncoder;
-
-	@Override
-	public boolean checkCredentials(Long userid, String password) {
-
-		Optional<UserPassword> userPassword = userPasswordRepository.findById(userid);
-		return userPassword.isPresent() && passwordEncoder.matches(password, userPassword.get().getPassword());
-	}
 
 	@Override
 	public boolean saveUserPassword(UserPassword userPassword) {
