@@ -1,5 +1,11 @@
 version: '3'
 services:
+
+  openjdk:
+    image: openjdk:17
+    container_name: openjdk
+    command: tail -f /dev/null # keep container running/alive
+
   postgres:
     image: ${POSTGRES_IMAGE}
     container_name: ${POSTGRES_CONTAINER_NAME}
