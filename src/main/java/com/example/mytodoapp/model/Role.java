@@ -26,6 +26,7 @@ public class Role {
 	@Id
 	@GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
 	private Long id;
+
 	@NotNull
-	private String name;
+	private String role;
 }
