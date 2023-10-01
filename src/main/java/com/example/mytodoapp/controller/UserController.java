@@ -41,28 +41,6 @@ public class UserController {
 		return PageRequest.of(page, size, sortable);
 	}
 
-	// Todo: I have to delete this method.
-//	@PostMapping("/users")
-//	public ResponseEntity<?> createUser(@Valid @RequestBody RegisterUserRequest newUser) {
-//
-//		User createdUser = userService.createUser(newUser);
-//
-//		URI location = ServletUriComponentsBuilder
-//						.fromCurrentRequest()
-//						.path("/{id}")
-//						.buildAndExpand(createdUser.getId())
-//						.toUri();
-//
-//		return ResponseEntity
-//						.created(location)
-//						.body(SuccessResponse
-//										.builder()
-//										.status(HttpStatus.CREATED)
-//										.message("User successfully created with Id: " + createdUser.getId())
-//										.data(createdUser)
-//										.build());
-//	}
-
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getUserById(@PathVariable Long id) {
 

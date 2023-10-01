@@ -14,7 +14,9 @@ import com.example.mytodoapp.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -26,21 +28,26 @@ public class UserServiceImpl implements UserService {
 	private final UserRepository userRepository;
 	private final TaskRepository taskRepository;
 	private final UserPasswordService userPasswordService;
+	private final PasswordEncoder passwordEncoder;
 
-	public void createUser(RegisterUserRequest newUser) {
+	@Transactional
+	public Long createUser(RegisterUserRequest newUser) {
 
 		if (userRepository.existsByUsername(newUser.getUsername())) {
 			throw new ResourceAlreadyExistsException("User already exists with username " + newUser.getUsername());
 		}
 
+		String encodedPassword = passwordEncoder.encode(newUser.getPassword());
 		User userCreated = userRepository.save(User.builder().username(newUser.getUsername()).build());
+		UserPassword userPassword = UserPassword.builder().userId(userCreated.getId()).password(encodedPassword).build();
 
-		if (!userPasswordService.saveUserPassword(UserPassword.builder().userId(userCreated.getId()).password(newUser.getPassword()).build())) {
+		if (!userPasswordService.saveUserPassword(userPassword)) {
 			// Rollback the changes if the password is not saved
 			// Throwing exception will trigger the rollback
 			throw new RuntimeException("Error while saving the password");
 		}
 
+		return userCreated.getId();
 	}
 
 	public User getUserById(Long id) {

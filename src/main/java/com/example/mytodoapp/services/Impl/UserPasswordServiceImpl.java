@@ -4,7 +4,6 @@ import com.example.mytodoapp.model.UserPassword;
 import com.example.mytodoapp.repository.UserPasswordRepository;
 import com.example.mytodoapp.services.UserPasswordService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -14,7 +13,6 @@ import java.util.Optional;
 public class UserPasswordServiceImpl implements UserPasswordService {
 
 	private final UserPasswordRepository userPasswordRepository;
-	private final PasswordEncoder passwordEncoder;
 
 	@Override
 	public boolean saveUserPassword(UserPassword userPassword) {
@@ -22,9 +20,9 @@ public class UserPasswordServiceImpl implements UserPasswordService {
 	}
 
 	@Override
-	public boolean checkPassword(Long userId, String password) {
+	public boolean checkPassword(Long userId, String encodedPassword) {
 
-		Optional<UserPassword> encodedPassword = userPasswordRepository.findByUserId(userId);
-		return encodedPassword.filter(userPassword -> passwordEncoder.matches(password, userPassword.getPassword())).isPresent();
+		Optional<UserPassword> encodedPasswordFromDB = userPasswordRepository.findByUserId(userId);
+		return encodedPasswordFromDB.isPresent() && encodedPassword.equals(encodedPasswordFromDB.get().getPassword());
 	}
 }

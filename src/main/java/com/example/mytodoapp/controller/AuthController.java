@@ -17,10 +17,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
 
 //@RestController TODO: Not Required for now, because for API application user will send username and password for every call !
 @RequestMapping("/auth")
@@ -31,7 +28,6 @@ public class AuthController {
 	private final TokenBlacklistServiceImpl tokenBlacklistServiceImpl;
 	private final TokenBlacklistService tokenBlacklistService;
 	private final UserService userService;
-	private final PasswordEncoder passwordEncoder;
 	private final AuthService authService;
 
 	@GetMapping("/login")
@@ -84,12 +80,6 @@ public class AuthController {
 		return "Logout Successful";
 	}
 
-	@GetMapping("/test")
-	public void test() {
-		System.out.println("Inside Test method :-> " + LocalDateTime.now());
-		tokenBlacklistService.deleteByExpiryDateBefore(LocalDateTime.now());
-	}
-
 	@PostMapping("/register")
 	public ResponseEntity<?> register(@RequestBody AuthRequest authRequest) {
 
@@ -108,10 +98,10 @@ public class AuthController {
 		}
 
 		// Creating the user.
-		userService.createUser(RegisterUserRequest
+		Long userId = userService.createUser(RegisterUserRequest
 						.builder()
 						.username(authRequest.getUsername())
-						.password(passwordEncoder.encode(authRequest.getPassword()))
+						.password(authRequest.getPassword())
 						.build());
 
 		return ResponseEntity
@@ -119,6 +109,6 @@ public class AuthController {
 						.body(SuccessResponse
 										.builder()
 										.status(HttpStatus.CREATED)
-										.message("User created successfully with UserName : " + authRequest.getUsername()).build());
+										.message("User created successfully with UserID : " + userId).build());
 	}
 }
