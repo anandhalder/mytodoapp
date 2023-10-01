@@ -9,6 +9,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -29,8 +30,10 @@ public class ApiAuthenticationProvider implements AuthenticationProvider {
 		if (!(username.isEmpty() && password.isEmpty())) {
 			User user = userService.getUserByUsername(username);
 			if (userPasswordService.checkPassword(user.getId(), password)) {
+				UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
+				SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 				// TODO: Get the Authority from the database.
-				return new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
+				return usernamePasswordAuthenticationToken;
 			} else {
 				return new UsernamePasswordAuthenticationToken(null, null);
 			}

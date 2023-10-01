@@ -1,15 +1,14 @@
 package com.example.mytodoapp.services;
 
 import com.example.mytodoapp.model.Task;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 public interface TaskService {
 
-	public void addTask();
+	void addTask();
 
-	public Task getTaskById(Long Id);
+	Task getTaskById(Long Id);
 
-	public List<Task> getAllTask();
+	List<Task> getAllTaskByUserId(Long UserId);
 }
