@@ -9,7 +9,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -20,7 +19,6 @@ public class ApiAuthenticationProvider implements AuthenticationProvider {
 
 	private final UserService userService;
 	private final UserPasswordService userPasswordService;
-	private final PasswordEncoder passwordEncoder;
 
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -30,7 +28,7 @@ public class ApiAuthenticationProvider implements AuthenticationProvider {
 
 		if (!(username.isEmpty() && password.isEmpty())) {
 			User user = userService.getUserByUsername(username);
-			if (userPasswordService.checkPassword(user.getId(), passwordEncoder.encode(password))) {
+			if (userPasswordService.checkPassword(user.getId(), password)) {
 				// TODO: Get the Authority from the database.
 				return new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
 			} else {

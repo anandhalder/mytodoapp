@@ -16,7 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -29,8 +28,7 @@ public class UserServiceImpl implements UserService {
 	private final TaskRepository taskRepository;
 	private final UserPasswordService userPasswordService;
 	private final PasswordEncoder passwordEncoder;
-
-	@Transactional
+	
 	public Long createUser(RegisterUserRequest newUser) {
 
 		if (userRepository.existsByUsername(newUser.getUsername())) {
