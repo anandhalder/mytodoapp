@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -15,12 +16,13 @@ public class TaskServiceImpl implements TaskService {
 	private final TaskRepository taskRepository;
 
 	@Override
-	public void addTask() {
+	public Long addTask(Task newTask) {
+		return taskRepository.save(newTask).getId();
 	}
 
 	@Override
-	public Task getTaskById(Long task_id) {
-		return null;
+	public Optional<Task> getTaskById(Long task_id) {
+		return taskRepository.findById(task_id);
 	}
 
 	@Override

@@ -2,13 +2,17 @@ package com.example.mytodoapp.controller;
 
 import com.example.mytodoapp.Utils.CurrentUserUtils;
 import com.example.mytodoapp.model.Task;
+import com.example.mytodoapp.model.User;
 import com.example.mytodoapp.services.TaskService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("/tasks")
+@RestController
+@RequestMapping("/tasks")
 @RequiredArgsConstructor
 public class TaskController {
 
@@ -30,8 +34,11 @@ public class TaskController {
 	public void deleteTaskById(Long id) { // Delete the Task with the given id.
 	}
 
-	@PutMapping
-	public Task addTask(@RequestBody Task task) { // Add a new Task for a Current User.
-		return new Task();
+	@PostMapping
+	public ResponseEntity<?> addTask(@Valid @RequestBody Task task) { // Add a new Task for a Current User.
+		User current_user = currentUserUtils.getCurrentUser();
+		task.setUser(current_user);
+		Long task_id = taskService.addTask(task);
+		return ResponseEntity.ok("Task added successfully with id: " + task_id);
 	}
 }

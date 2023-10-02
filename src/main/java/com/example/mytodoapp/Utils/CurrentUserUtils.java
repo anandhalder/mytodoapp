@@ -19,4 +19,14 @@ public class CurrentUserUtils {
 
 		throw new ApiAuthenticationException("User is not authenticated !");
 	}
+
+	public User getCurrentUser() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+		if (authentication != null && authentication.isAuthenticated()) {
+			return (User) authentication.getPrincipal();
+		}
+
+		throw new ApiAuthenticationException("User is not authenticated !");
+	}
 }

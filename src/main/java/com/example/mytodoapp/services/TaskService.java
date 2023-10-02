@@ -3,12 +3,13 @@ package com.example.mytodoapp.services;
 import com.example.mytodoapp.model.Task;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface TaskService {
 
-	void addTask();
+	Long addTask(Task newTask);
 
-	Task getTaskById(Long Id);
+	Optional<Task> getTaskById(Long Id);
 
 	List<Task> getAllTaskByUserId(Long UserId);
 }
