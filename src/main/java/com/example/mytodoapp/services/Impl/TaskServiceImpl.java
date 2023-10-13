@@ -3,7 +3,7 @@ package com.example.mytodoapp.services.Impl;
 import com.example.mytodoapp.model.Task;
 import com.example.mytodoapp.repository.TaskRepository;
 import com.example.mytodoapp.services.TaskService;
-import com.example.mytodoapp.validation.TaskValidationsService;
+import com.example.mytodoapp.validation.TaskValidationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +15,11 @@ import java.util.Optional;
 public class TaskServiceImpl implements TaskService {
 
 	private final TaskRepository taskRepository;
-	private final TaskValidationsService taskValidationsService;
+	private final TaskValidationService taskValidationService;
 
 	@Override
 	public Long addTask(Task newTask) {
-		boolean validatedTask = taskValidationsService.isTaskValid(newTask); // Task is valid if it doesn't exist for the current user.
+		boolean validatedTask = taskValidationService.validate(newTask); // Task is valid if it doesn't exist for the current user.
 		if (!validatedTask) {
 			throw new RuntimeException("Task already exists for the current user.");
 		}
