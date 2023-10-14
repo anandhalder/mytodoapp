@@ -1,4 +1,4 @@
-version: '3'
+version: '4'
 services:
 
   openjdk:
@@ -15,6 +15,22 @@ services:
       - ${POSTGRES_PORT}:5432
     volumes:
       - postgres-data:/var/lib/postgresql/data
+
+  collector:
+    image: otel/opentelemetry-collector:0.72.0
+    command: [ "--config=/etc/otel-collector-config.yml" ]
+    volumes:
+      - ../Otel/otel-config.yml:/etc/otel-collector-config.yml
+    ports:
+      - "4317:4317"
+    depends_on:
+      - jaeger-service
+
+  jaeger-service:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "16686:16686"
+      - "14250"
 
 volumes:
   postgres-data:
