@@ -20,7 +20,7 @@ services:
     image: otel/opentelemetry-collector:0.72.0
     command: [ "--config=/etc/otel-collector-config.yml" ]
     volumes:
-      - ../Otel/otel-config.yml:/etc/otel-collector-config.yml
+      - ..\\src\\main\\java\\com\\example\\mytodoapp\\Otel\\otel-config.yml:/etc/otel-collector-config.yml
     ports:
       - "4317:4317"
     depends_on:
