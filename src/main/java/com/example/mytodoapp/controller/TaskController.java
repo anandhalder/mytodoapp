@@ -1,8 +1,8 @@
 package com.example.mytodoapp.controller;
 
-import com.example.mytodoapp.Utils.CurrentUserUtils;
+import com.example.mytodoapp.Utils.TaskUtils;
+import com.example.mytodoapp.dto.TaskRequest;
 import com.example.mytodoapp.model.Task;
-import com.example.mytodoapp.model.User;
 import com.example.mytodoapp.services.TaskService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,12 +17,11 @@ import java.util.List;
 public class TaskController {
 
 	private final TaskService taskService;
-	private final CurrentUserUtils currentUserUtils;
+	private final TaskUtils taskUtils;
 
 	@GetMapping
 	public List<Task> getAllTasks() { // Return all tasks for the current user.
-		Long user_id = currentUserUtils.getCurrentUserId();
-		return taskService.getAllTaskByUserId(user_id);
+		return taskService.getAllTaskByUserId();
 	}
 
 	@GetMapping("/{id}")
@@ -35,10 +34,8 @@ public class TaskController {
 	}
 
 	@PostMapping
-	public ResponseEntity<?> addTask(@Valid @RequestBody Task task) { // Add a new Task for a Current User.
-		User current_user = currentUserUtils.getCurrentUser();
-		task.setUser(current_user);
-		Long task_id = taskService.addTask(task);
-		return ResponseEntity.ok("Task added successfully with id: " + task_id);
+	public ResponseEntity<?> create(@Valid @RequestBody List<Task> tasks) { // Add a new Task for a Current User.
+		TaskRequest taskRequest = taskUtils.createTaskRequest(tasks);
+		return ResponseEntity.badRequest().body("Validation Failed : ");
 	}
 }

@@ -1,7 +1,8 @@
 package com.example.mytodoapp.validation;
 
-import com.example.mytodoapp.model.Task;
+import com.example.mytodoapp.dto.TaskRequest;
+
 public interface TaskValidationService {
 
-	boolean validate(Task task);
+	void validate(TaskRequest taskRequest);
 }

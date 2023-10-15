@@ -1,5 +1,6 @@
 package com.example.mytodoapp.services.Impl;
 
+import com.example.mytodoapp.dto.TaskRequest;
 import com.example.mytodoapp.model.Task;
 import com.example.mytodoapp.repository.TaskRepository;
 import com.example.mytodoapp.services.TaskService;
@@ -18,12 +19,12 @@ public class TaskServiceImpl implements TaskService {
 	private final TaskValidationService taskValidationService;
 
 	@Override
-	public Long addTask(Task newTask) {
-		boolean validatedTask = taskValidationService.validate(newTask); // Task is valid if it doesn't exist for the current user.
-		if (!validatedTask) {
-			throw new RuntimeException("Task already exists for the current user.");
+	public Optional<Long> addTasks(TaskRequest taskRequest) {
+		taskValidationService.validate(taskRequest); // Task is valid if it doesn't exist for the current user.
+		if (!taskRequest.isValid()) {
+			return Optional.empty();
 		}
-		return taskRepository.save(newTask).getId();
+		return taskRepository.saveAll(taskRequest.getTasks()).stream().map(Task::getId).to;
 	}
 
 	@Override
