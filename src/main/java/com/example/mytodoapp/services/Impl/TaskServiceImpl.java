@@ -19,12 +19,12 @@ public class TaskServiceImpl implements TaskService {
 	private final TaskValidationService taskValidationService;
 
 	@Override
-	public Optional<Long> addTasks(TaskRequest taskRequest) {
+	public Optional<List<Long>> addTasks(TaskRequest taskRequest) {
 		taskValidationService.validate(taskRequest); // Task is valid if it doesn't exist for the current user.
 		if (!taskRequest.isValid()) {
 			return Optional.empty();
 		}
-		return taskRepository.saveAll(taskRequest.getTasks()).stream().map(Task::getId).to;
+		return Optional.of(taskRepository.saveAll(taskRequest.getTasks()).stream().map(Task::getId).toList());
 	}
 
 	@Override

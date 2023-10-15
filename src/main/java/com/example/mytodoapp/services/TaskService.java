@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface TaskService {
 
-	Optional<Long> addTasks(TaskRequest taskRequest);
+	Optional<List<Long>> addTasks(TaskRequest taskRequest);
 
 	Optional<Task> getTaskById(Long Id);
 
