@@ -17,6 +17,7 @@ services:
       - postgres-data:/var/lib/postgresql/data
 
   collector:
+    container_name: ${OTEL_CONTAINER_NAME}
     image: otel/opentelemetry-collector:0.72.0
     command: [ "--config=/etc/otel-collector-config.yml" ]
     volumes:
@@ -27,6 +28,7 @@ services:
       - jaeger-service
 
   jaeger-service:
+    container_name: ${JAEGAR_CONTAINER_NAME}
     image: jaegertracing/all-in-one:latest
     ports:
       - "16686:16686"
