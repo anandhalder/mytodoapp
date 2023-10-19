@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
-	
+
 	private final UserService userService;
 
 	@PostMapping("/register")
@@ -48,7 +48,6 @@ public class AuthController {
 						.status(HttpStatus.CREATED)
 						.body(SuccessResponse
 										.builder()
-										.status(HttpStatus.CREATED)
 										.message("User created successfully with UserID : " + userId).build());
 	}
 }

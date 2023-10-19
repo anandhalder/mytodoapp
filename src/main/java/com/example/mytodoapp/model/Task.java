@@ -1,5 +1,6 @@
 package com.example.mytodoapp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,6 +31,7 @@ public class Task {
 	@Column(nullable = true)
 	private LocalDate dueDate = LocalDate.now().plusDays(7);
 
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;

@@ -3,7 +3,7 @@ services:
 
   openjdk:
     image: openjdk:17
-    container_name: openjdk
+    container_name: ${OPENJDK_CONTAINER_NAME}
     command: tail -f /dev/null # keep container running/alive
 
   postgres:

@@ -12,5 +12,5 @@ public interface TaskService {
 
 	Optional<Task> getTaskById(Long Id);
 
-	List<Task> getAllTaskByUserId(Long UserId);
+	Optional<List<Task>> getAllTaskByUserId(TaskRequest taskRequest);
 }

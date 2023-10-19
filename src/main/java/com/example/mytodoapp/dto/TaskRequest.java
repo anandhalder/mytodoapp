@@ -17,6 +17,7 @@ public class TaskRequest {
 	private List<Task> tasks;
 	private boolean isValid;
 	private List<Task> invalidTasks;
+	private List<Task> validTasks;
 	private List<Pair> validationsResult;
 	private User user;
 }

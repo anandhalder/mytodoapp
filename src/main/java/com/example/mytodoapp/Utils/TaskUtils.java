@@ -16,7 +16,13 @@ public class TaskUtils {
 
 	public TaskRequest createTaskRequest(List<Task> tasks) {
 		User user = currentUserUtils.getCurrentUser();
+		tasks.forEach(task -> task.setUser(user));
 		return TaskRequest.builder().user(user).tasks(tasks).build();
+	}
+
+	public TaskRequest createTaskRequest() {
+		User user = currentUserUtils.getCurrentUser();
+		return TaskRequest.builder().user(user).build();
 	}
 
 	public void setUserId(User logged_in_user, TaskRequest taskRequest) {

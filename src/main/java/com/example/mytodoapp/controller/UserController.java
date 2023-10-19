@@ -8,7 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,7 +49,6 @@ public class UserController {
 						.ok()
 						.body(SuccessResponse
 										.builder()
-										.status(HttpStatus.FOUND)
 										.message("User found with Id: " + user.getId())
 										.data(user)
 										.build());
@@ -65,7 +63,6 @@ public class UserController {
 						.ok()
 						.body(SuccessResponse
 										.builder()
-										.status(HttpStatus.NO_CONTENT)
 										.message("User deleted successfully with Id: " + id)
 										.build());
 	}
@@ -80,7 +77,6 @@ public class UserController {
 						.ok()
 						.body(SuccessResponse
 										.builder()
-										.status(HttpStatus.OK)
 										.message("User updated successfully with Id: " + id)
 										.data(updatedUser)
 										.build());
@@ -97,116 +93,8 @@ public class UserController {
 						.ok()
 						.body(SuccessResponse
 										.builder()
-										.status(HttpStatus.OK)
 										.message("All Users")
 										.data(users)
 										.build());
 	}
-
-//	// This will sort the tasks by dueDate in ascending order.
-//	@GetMapping("/{id}/tasks")
-//	public ResponseEntity<SuccessResponse<?>> getAllTasksByUserId(@PathVariable long id,
-//																																@RequestParam(defaultValue = "0") int page,
-//																																@RequestParam(defaultValue = "10") int size,
-//																																@RequestParam(defaultValue = "dueDate, asc") String[] sort) {
-//
-//		Pageable pageable = createPageable(page, size, sort);
-//
-//		Page<Task> tasks = userService.getAllTasksByUserId(id, pageable);
-//
-//		return ResponseEntity
-//						.ok()
-//						.body(SuccessResponse
-//										.builder()
-//										.status(HttpStatus.OK)
-//										.message("All Task Found for User Id :" + id)
-//										.data(tasks)
-//										.build());
-//	}
-//
-//	@GetMapping("/{userid}/tasks/{taskid}")
-//	public ResponseEntity<SuccessResponse<?>> getTaskById(@PathVariable long userid,
-//																												@PathVariable long taskid) {
-//
-//		Task task = userService.getTaskById(userid, taskid);
-//
-//		return ResponseEntity
-//						.ok()
-//						.body(SuccessResponse
-//										.builder()
-//										.status(HttpStatus.OK)
-//										.message("Task found with Id: " + task.getId() + " with User id " + userid)
-//										.data(task)
-//										.build());
-//	}
-//
-//	@DeleteMapping("/{userid}/tasks/{taskid}")
-//	public ResponseEntity<SuccessResponse<?>> deleteTask(@PathVariable long userid,
-//																											 @PathVariable long taskid) {
-//
-//		userService.deleteTaskById(userid, taskid);
-//
-//		return ResponseEntity
-//						.ok()
-//						.body(SuccessResponse
-//										.builder()
-//										.status(HttpStatus.NO_CONTENT)
-//										.message("Task deleted successfully with Id: " + taskid + " with User id " + userid)
-//										.build());
-//	}
-//
-//	@PostMapping("/{userid}/tasks")
-//	public ResponseEntity<SuccessResponse<?>> createTask(@PathVariable Long userid,
-//																											 @RequestBody Task task) {
-//
-//		Task createdTask = userService.createTask(userid, task);
-//
-//		URI location = ServletUriComponentsBuilder
-//						.fromCurrentRequest()
-//						.path("/{id}")
-//						.buildAndExpand(createdTask.getId())
-//						.toUri();
-//
-//		return ResponseEntity
-//						.created(location)
-//						.body(SuccessResponse
-//										.builder()
-//										.status(HttpStatus.CREATED)
-//										.message("Task successfully created with Id: " + createdTask.getId())
-//										.data(createdTask)
-//										.build());
-//	}
-//
-//	@PutMapping("/{userid}/tasks/{taskid}")
-//	public ResponseEntity<SuccessResponse<?>> updateTask(@PathVariable Long userid,
-//																											 @PathVariable Long taskid,
-//																											 @RequestBody Task task) {
-//
-//		Task updatedTask = userService.updateTaskById(userid, taskid, task);
-//
-//		return ResponseEntity
-//						.ok()
-//						.body(SuccessResponse
-//										.builder()
-//										.status(HttpStatus.OK)
-//										.message("Task updated successfully with Id: " + taskid)
-//										.data(updatedTask)
-//										.build());
-//	}
-//
-//	@PutMapping("/{userid}/tasks/{taskid}/{newuserid}")
-//	public ResponseEntity<SuccessResponse<?>> updateTaskAssignment(@PathVariable Long userid,
-//																																 @PathVariable Long taskid,
-//																																 @PathVariable Long newuserid) {
-//
-//		Task updatedTask = userService.updateTaskAssignment(userid, taskid, newuserid);
-//
-//		return ResponseEntity
-//						.ok()
-//						.body(SuccessResponse
-//										.builder()
-//										.status(HttpStatus.OK)
-//										.message("Task is updated with the new User as an assignment " + newuserid)
-//										.data(updatedTask).build());
-//	}
 }

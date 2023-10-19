@@ -3,13 +3,13 @@ package com.example.mytodoapp.controller;
 import com.example.mytodoapp.Utils.TaskUtils;
 import com.example.mytodoapp.dto.TaskRequest;
 import com.example.mytodoapp.model.Task;
+import com.example.mytodoapp.response.SuccessResponse;
 import com.example.mytodoapp.services.TaskService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,13 +23,22 @@ public class TaskController {
 	private final TaskUtils taskUtils;
 
 	@GetMapping
-	public List<Task> getAllTasks() { // Return all tasks for the current user.
-		return new ArrayList<>();
+	public ResponseEntity<?> getAllTasks() { // Return all tasks for the current user.
+		TaskRequest taskRequest = taskUtils.createTaskRequest();
+		Optional<List<Task>> tasks = taskService.getAllTaskByUserId(taskRequest);
+		if (tasks.isEmpty()) {
+			return ResponseEntity.ok().body(SuccessResponse.builder().message("No Tasks found.").build());
+		}
+		return ResponseEntity.ok().body(tasks);
 	}
 
 	@GetMapping("/{id}")
-	public Task getTaskById(Long id) { // Return the Task with the given id.
-		return null;
+	public ResponseEntity<?> getTaskById(@PathVariable Long id) { // Return the Task with the given id.
+		Optional<Task> task = taskService.getTaskById(id);
+		if (task.isEmpty()) {
+			return ResponseEntity.ok("Task not found with ID :" + id);
+		}
+		return ResponseEntity.ok(task);
 	}
 
 	@DeleteMapping("/{id}")

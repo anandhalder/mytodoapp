@@ -33,7 +33,7 @@ public class TaskServiceImpl implements TaskService {
 	}
 
 	@Override
-	public List<Task> getAllTaskByUserId(Long user_id) {
-		return taskRepository.findAllByUserId(user_id);
+	public Optional<List<Task>> getAllTaskByUserId(TaskRequest taskRequest) {
+		return Optional.ofNullable(taskRepository.findAllByUserId(taskRequest.getUser().getId()));
 	}
 }
