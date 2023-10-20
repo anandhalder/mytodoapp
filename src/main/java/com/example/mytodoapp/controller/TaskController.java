@@ -32,13 +32,14 @@ public class TaskController {
 		return ResponseEntity.ok().body(tasks);
 	}
 
-	@GetMapping("/{id}")
-	public ResponseEntity<?> getTaskById(@PathVariable Long id) { // Return the Task with the given id.
-		Optional<Task> task = taskService.getTaskById(id);
+	@GetMapping("/{taskId}")
+	public ResponseEntity<?> getTaskById(@PathVariable Long taskId) { // Return the Task with the given id.
+		TaskRequest taskRequest = taskUtils.createTaskRequest(taskId);
+		Optional<Task> task = taskService.getTaskById(taskRequest);
 		if (task.isEmpty()) {
-			return ResponseEntity.ok("Task not found with ID :" + id);
+			return ResponseEntity.ok("Task not found with ID :" + taskId);
 		}
-		return ResponseEntity.ok(task);
+		return ResponseEntity.ok(task.get());
 	}
 
 	@DeleteMapping("/{id}")

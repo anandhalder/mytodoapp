@@ -25,6 +25,11 @@ public class TaskUtils {
 		return TaskRequest.builder().user(user).build();
 	}
 
+	public TaskRequest createTaskRequest(Long task_id) {
+		User user = currentUserUtils.getCurrentUser();
+		return TaskRequest.builder().user(user).taskId(task_id).build();
+	}
+
 	public void setUserId(User logged_in_user, TaskRequest taskRequest) {
 		if (taskRequest != null && logged_in_user != null) {
 			taskRequest.getTasks().forEach(task -> task.setUser(logged_in_user));

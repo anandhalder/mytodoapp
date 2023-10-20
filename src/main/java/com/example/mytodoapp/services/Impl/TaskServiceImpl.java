@@ -28,8 +28,8 @@ public class TaskServiceImpl implements TaskService {
 	}
 
 	@Override
-	public Optional<Task> getTaskById(Long task_id) {
-		return taskRepository.findById(task_id);
+	public Optional<Task> getTaskById(TaskRequest taskRequest) {
+		return taskRepository.findByIdAndUserId(taskRequest.getTaskId(), taskRequest.getUser().getId());
 	}
 
 	@Override

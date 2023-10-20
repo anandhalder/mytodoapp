@@ -10,7 +10,7 @@ public interface TaskService {
 
 	Optional<List<Long>> addTasks(TaskRequest taskRequest);
 
-	Optional<Task> getTaskById(Long Id);
+	Optional<Task> getTaskById(TaskRequest taskRequest);
 
 	Optional<List<Task>> getAllTaskByUserId(TaskRequest taskRequest);
 }
