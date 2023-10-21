@@ -5,6 +5,7 @@ import com.example.mytodoapp.model.Task;
 import com.example.mytodoapp.repository.TaskRepository;
 import com.example.mytodoapp.services.TaskService;
 import com.example.mytodoapp.validation.TaskValidationService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -35,5 +36,11 @@ public class TaskServiceImpl implements TaskService {
 	@Override
 	public Optional<List<Task>> getAllTaskByUserId(TaskRequest taskRequest) {
 		return Optional.ofNullable(taskRepository.findAllByUserId(taskRequest.getUser().getId()));
+	}
+
+	@Transactional
+	@Override
+	public int deleteTaskByTaskId(TaskRequest taskRequest) {
+		return taskRepository.deleteByIdAndUserId(taskRequest.getTaskId(), taskRequest.getUser().getId());
 	}
 }

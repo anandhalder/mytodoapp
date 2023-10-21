@@ -42,12 +42,24 @@ public class TaskController {
 		return ResponseEntity.ok(task.get());
 	}
 
-	@DeleteMapping("/{id}")
-	public void deleteTaskById(Long id) { // Delete the Task with the given id.
+	@DeleteMapping("/{taskId}")
+	public ResponseEntity<?> deleteTaskById(@PathVariable Long taskId) { // Delete the Task with the given id.
+		TaskRequest taskRequest = taskUtils.createTaskRequest(taskId);
+		int deletedCount = taskService.deleteTaskByTaskId(taskRequest);
+
+		if (deletedCount != 1) {
+			return ResponseEntity.ok("Task not found with ID :" + taskId);
+		}
+
+		return ResponseEntity.ok().body("Task Deleted Successfully !");
 	}
 
 	@PostMapping
 	public ResponseEntity<?> create(@Valid @RequestBody List<Task> tasks) { // Add a new Task for a Current User.
+		if (tasks.isEmpty()) {
+			return ResponseEntity.ok("Input is empty !");
+		}
+
 		TaskRequest taskRequest = taskUtils.createTaskRequest(tasks);
 		Optional<List<Long>> tasks_id = taskService.addTasks(taskRequest);
 
