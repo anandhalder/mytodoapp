@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 public class TaskRequest {
-	// TODO: Do i need to make this more generic ?
+	
 	private Long taskId;
 	private List<Task> tasks;
 	private boolean isValid;

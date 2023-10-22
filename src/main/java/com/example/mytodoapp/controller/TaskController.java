@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -67,5 +68,27 @@ public class TaskController {
 			return ResponseEntity.badRequest().body(taskRequest.getValidationsResult());
 		}
 		return ResponseEntity.ok().body("Task created successfully with Task_ids : " + tasks_id.get().stream().map(String::valueOf).collect(Collectors.joining(", ")));
+	}
+
+	// TODO: Fixed this code think about more better way to handle exceptions !
+	@PutMapping("/{taskId}")
+	public ResponseEntity<?> updateTask(@PathVariable Long taskId, @RequestBody Task updatedTaskDetails) {
+		TaskRequest taskRequest = taskUtils.createTaskRequest(taskId);
+		// Check if the Task Exists in DB.
+		Optional<Task> existingTask = taskService.getTaskById(taskRequest);
+		if (existingTask.isPresent()) {
+			return ResponseEntity.ok().body("Task not found with Task ID :" + taskId);
+		}
+
+		taskRequest.setTasks(new ArrayList<>() {{
+			add(existingTask.get());
+		}});
+		Task updatedTask = taskService.updateTask(taskRequest);
+
+		if (updatedTask != null) {
+			return ResponseEntity.ok().body("Task is updated :" + updatedTask);
+		}
+
+		return ResponseEntity.internalServerError().build();
 	}
 }

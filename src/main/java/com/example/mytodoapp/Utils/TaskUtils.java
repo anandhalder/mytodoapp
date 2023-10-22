@@ -6,6 +6,7 @@ import com.example.mytodoapp.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 @Service
@@ -29,11 +30,23 @@ public class TaskUtils {
 		User user = currentUserUtils.getCurrentUser();
 		return TaskRequest.builder().user(user).taskId(task_id).build();
 	}
+	
+	public void updateTaskDetails(Task existingTask, Task updatedTaskDetails) {
+		if (existingTask != null && updatedTaskDetails != null) {
+			Class<?> taskClass = existingTask.getClass();
+			Field[] fields = taskClass.getDeclaredFields();
 
-	public void setUserId(User logged_in_user, TaskRequest taskRequest) {
-		if (taskRequest != null && logged_in_user != null) {
-			taskRequest.getTasks().forEach(task -> task.setUser(logged_in_user));
+			for (Field field : fields) {
+				field.setAccessible(true);
+				try {
+					Object value = field.get(updatedTaskDetails);
+					if (value != null) {
+						field.set(existingTask, value);
+					}
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				}
+			}
 		}
-		throw new RuntimeException("TaskRequest or UserId cannot be Null !");
 	}
 }

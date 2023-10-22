@@ -1,5 +1,6 @@
 package com.example.mytodoapp.services.Impl;
 
+import com.example.mytodoapp.Utils.TaskUtils;
 import com.example.mytodoapp.dto.TaskRequest;
 import com.example.mytodoapp.model.Task;
 import com.example.mytodoapp.repository.TaskRepository;
@@ -18,6 +19,7 @@ public class TaskServiceImpl implements TaskService {
 
 	private final TaskRepository taskRepository;
 	private final TaskValidationService taskValidationService;
+	private final TaskUtils taskUtils;
 
 	@Override
 	public Optional<List<Long>> addTasks(TaskRequest taskRequest) {
@@ -42,5 +44,12 @@ public class TaskServiceImpl implements TaskService {
 	@Override
 	public int deleteTaskByTaskId(TaskRequest taskRequest) {
 		return taskRepository.deleteByIdAndUserId(taskRequest.getTaskId(), taskRequest.getUser().getId());
+	}
+
+	@Override
+	public Task updateTask(TaskRequest taskRequest) {
+		Task existingTask = taskRequest.getTasks().get(0);
+		taskUtils.updateTaskDetails(existingTask, taskRequest.getTasks().get(0));
+		return taskRepository.save(existingTask);
 	}
 }

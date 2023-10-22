@@ -15,4 +15,6 @@ public interface TaskService {
 	Optional<List<Task>> getAllTaskByUserId(TaskRequest taskRequest);
 
 	int deleteTaskByTaskId(TaskRequest taskRequest);
+
+	Task updateTask(TaskRequest taskRequest);
 }
