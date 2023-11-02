@@ -3,7 +3,6 @@ package com.example.mytodoapp.validation.Impl;
 import com.example.mytodoapp.Utils.Pair;
 import com.example.mytodoapp.dto.TaskRequest;
 import com.example.mytodoapp.model.Task;
-import com.example.mytodoapp.repository.TaskRepository;
 import com.example.mytodoapp.validation.TaskValidationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,8 +14,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TaskValidationsServiceImpl implements TaskValidationService {
 
-	private final TaskRepository taskRepository;
-
 	public void validate(TaskRequest taskRequest) {
 		doTaskValidation(taskRequest);
 		taskRequest.setValid(true);
@@ -24,14 +21,12 @@ public class TaskValidationsServiceImpl implements TaskValidationService {
 
 	public void doTaskValidation(TaskRequest taskRequest) {
 		List<Task> tasks = taskRequest.getTasks();
-
 		for (int i = 0; i < tasks.size(); i++) {
 			checkTaskDescription(i, tasks.get(i), taskRequest);
 		}
 	}
 
 	public void checkTaskDescription(int id, Task task, TaskRequest taskRequest) {
-
 		if (task.getDescription() != null) {
 			task.setDescription(sanitize(task.getDescription()));
 		} else {
