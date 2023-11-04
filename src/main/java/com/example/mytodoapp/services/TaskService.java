@@ -1,20 +1,17 @@
 package com.example.mytodoapp.services;
 
 import com.example.mytodoapp.dto.TaskRequest;
-import com.example.mytodoapp.model.Task;
-
-import java.util.List;
-import java.util.Optional;
+import com.example.mytodoapp.dto.TaskResponse;
 
 public interface TaskService {
 
-	Optional<List<Long>> addTasks(TaskRequest taskRequest);
+	TaskResponse addTasks(TaskRequest taskRequest);
 
-	Optional<Task> getTaskById(TaskRequest taskRequest);
+	TaskResponse getTaskById(TaskRequest taskRequest);
 
-	Optional<List<Task>> getAllTaskByUserId(TaskRequest taskRequest);
+	TaskResponse getAllTaskByUserId(TaskRequest taskRequest);
 
-	int deleteTaskByTaskId(TaskRequest taskRequest);
+	TaskResponse deleteTaskByTaskId(TaskRequest taskRequest);
 
-	Task updateTask(TaskRequest taskRequest);
+	TaskResponse updateTask(TaskRequest taskRequest);
 }

@@ -2,6 +2,7 @@ package com.example.mytodoapp.services.Impl;
 
 import com.example.mytodoapp.Utils.TaskUtils;
 import com.example.mytodoapp.dto.TaskRequest;
+import com.example.mytodoapp.dto.TaskResponse;
 import com.example.mytodoapp.model.Task;
 import com.example.mytodoapp.repository.TaskRepository;
 import com.example.mytodoapp.services.TaskService;
@@ -10,7 +11,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,34 +22,44 @@ public class TaskServiceImpl implements TaskService {
 	private final TaskUtils taskUtils;
 
 	@Override
-	public Optional<List<Long>> addTasks(TaskRequest taskRequest) {
-		taskValidationService.validate(taskRequest); // Task is valid if it doesn't exist for the current user.
-		if (!taskRequest.getInValidTasks().isEmpty()) {
-			return Optional.empty();
-		}
-		return Optional.of(taskRepository.saveAll(taskRequest.getTasks()).stream().map(Task::getId).toList());
+	public TaskResponse addTasks(TaskRequest taskRequest) {
+		TaskResponse taskResponse = createTaskResponse(taskRequest);
+		taskValidationService.validate(taskRequest, taskResponse);
+		return taskResponse;
 	}
 
 	@Override
-	public Optional<Task> getTaskById(TaskRequest taskRequest) {
-		return taskRepository.findByIdAndUserId(taskRequest.getTaskId(), taskRequest.getUser().getId());
+	public TaskResponse getTaskById(TaskRequest taskRequest) {
+		TaskResponse taskResponse = createTaskResponse(taskRequest);
+		taskRepository.findByIdAndUserId(taskRequest.getTaskId(), taskRequest.getUser().getId());
+		return taskResponse;
 	}
 
 	@Override
-	public Optional<List<Task>> getAllTaskByUserId(TaskRequest taskRequest) {
-		return Optional.ofNullable(taskRepository.findAllByUserId(taskRequest.getUser().getId()));
+	public TaskResponse getAllTaskByUserId(TaskRequest taskRequest) {
+		TaskResponse taskResponse = createTaskResponse(taskRequest);
+		Optional.ofNullable(taskRepository.findAllByUserId(taskRequest.getUser().getId()));
+		return taskResponse;
 	}
 
 	@Transactional
 	@Override
-	public int deleteTaskByTaskId(TaskRequest taskRequest) {
-		return taskRepository.deleteByIdAndUserId(taskRequest.getTaskId(), taskRequest.getUser().getId());
+	public TaskResponse deleteTaskByTaskId(TaskRequest taskRequest) {
+		TaskResponse taskResponse = createTaskResponse(taskRequest);
+		taskRepository.deleteByIdAndUserId(taskRequest.getTaskId(), taskRequest.getUser().getId());
+		return taskResponse;
 	}
 
 	@Override
-	public Task updateTask(TaskRequest taskRequest) {
+	public TaskResponse updateTask(TaskRequest taskRequest) {
+		TaskResponse taskResponse = createTaskResponse(taskRequest);
 		Task existingTask = taskRequest.getTasks().get(0);
 		taskUtils.updateTaskDetails(existingTask, taskRequest.getTasks().get(0));
-		return taskRepository.save(existingTask);
+		taskRepository.save(existingTask);
+		return taskResponse;
+	}
+
+	public TaskResponse createTaskResponse(TaskRequest taskRequest) {
+		return TaskResponse.builder().user(taskRequest.getUser()).build();
 	}
 }

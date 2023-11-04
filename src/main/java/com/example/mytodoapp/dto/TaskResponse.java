@@ -1,18 +1,17 @@
 package com.example.mytodoapp.dto;
 
-import com.example.mytodoapp.Utils.Pair;
 import com.example.mytodoapp.model.Task;
+import com.example.mytodoapp.model.User;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.util.List;
 
 @Builder
-@Getter
-@Setter
+@Data
 public class TaskResponse {
 
+	User user;
 	List<Task> tasks;
-	List<Pair> invalidTasks;
+	List<Task> inValidTasks;
 }
