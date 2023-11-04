@@ -24,7 +24,7 @@ public class TaskServiceImpl implements TaskService {
 	@Override
 	public Optional<List<Long>> addTasks(TaskRequest taskRequest) {
 		taskValidationService.validate(taskRequest); // Task is valid if it doesn't exist for the current user.
-		if (!taskRequest.isValid()) {
+		if (!taskRequest.getInValidTasks().isEmpty()) {
 			return Optional.empty();
 		}
 		return Optional.of(taskRepository.saveAll(taskRequest.getTasks()).stream().map(Task::getId).toList());

@@ -65,7 +65,7 @@ public class TaskController {
 		TaskRequest taskRequest = taskUtils.createTaskRequest(tasks);
 		Optional<List<Long>> tasks_id = taskService.addTasks(taskRequest);
 		if (tasks_id.isEmpty()) {
-			return ResponseEntity.badRequest().body(taskRequest.getValidationsResult());
+			return ResponseEntity.badRequest().body(taskRequest.getInValidTasks());
 		}
 		return ResponseEntity.ok().body("Task created successfully with Task_ids : " + tasks_id.get().stream().map(String::valueOf).collect(Collectors.joining(", ")));
 	}
