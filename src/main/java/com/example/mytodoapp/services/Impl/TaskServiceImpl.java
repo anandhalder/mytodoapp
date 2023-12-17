@@ -2,7 +2,6 @@ package com.example.mytodoapp.services.Impl;
 
 import com.example.mytodoapp.Utils.TaskUtils;
 import com.example.mytodoapp.dto.TaskRequest;
-import com.example.mytodoapp.dto.TaskResponse;
 import com.example.mytodoapp.model.Task;
 import com.example.mytodoapp.repository.TaskRepository;
 import com.example.mytodoapp.services.TaskService;
@@ -11,6 +10,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
